@@ -4,8 +4,9 @@ from dataclasses import dataclass
 from typing import List
 import json
 from entitys import Item
-from logger import log
+from services.logger import log
 from mixins import RequestMixin
+from services.path_folder import check_folder
 
 
 @dataclass
@@ -73,6 +74,7 @@ class ParseMetro(RequestMixin):
         """
         current_time = time.time()
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(current_time))
+        check_folder('parse-data')
         with open(f'parse-data/data - {current_time}.json', "w", encoding="utf-8") as file:
             json.dump(items, file, indent=4, ensure_ascii=False)
             return True

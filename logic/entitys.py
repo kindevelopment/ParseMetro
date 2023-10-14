@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from bs4 import BeautifulSoup
-from logger import log
+from services.logger import log
 from mixins import RequestMixin
 
 

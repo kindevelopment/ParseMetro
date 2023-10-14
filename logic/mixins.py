@@ -1,6 +1,6 @@
-from config import conf
 import requests
 from bs4 import BeautifulSoup
+from config.config import conf
 
 
 class RequestMixin:
