@@ -19,7 +19,12 @@ class ParseMetro(RequestMixin):
 
         """
         soup = self.build_soup()
-        return int(soup.find('nav', attrs={'role': 'navigation', 'class': 'subcategory-or-type__pagination'}).find('ul').find_all('li')[-2].text)
+        return int(
+            soup.find('nav', attrs={'role': 'navigation', 'class': 'subcategory-or-type__pagination'})
+            .find('ul')
+            .find_all('li')[-2]
+            .text
+        )
 
     @log
     def get_all_items_in_category(self) -> List[dict[str]]:
@@ -29,22 +34,33 @@ class ParseMetro(RequestMixin):
         """
         amount_pages = self.get_amount_pages()
         items_link = list()
-        for num_page in range(1, amount_pages+1):
+        for num_page in range(1, amount_pages + 1):
             soup = self.build_soup(f'{self.url}&page={num_page}')
-            items_to_page = soup.find('div', id='products-inner').find_all('div', class_='catalog-2-level-product-card product-card subcategory-or-type__products-item catalog--common offline-prices-sorting--best-level with-prices-drop')
+            items_to_page = soup.find('div', id='products-inner').find_all(
+                'div',
+                class_='catalog-2-level-product-card product-card subcategory-or-type__products-item catalog--common offline-prices-sorting--best-level with-prices-drop',
+            )
             for item in items_to_page:
                 price_info = item.find('div', class_='product-card-prices__content-prices')
-                current_price = ''.join([span.text for span in price_info.find(
-                    class_='product-card-prices__actual'
-                ).find(class_='product-price__sum').find_all('span') if not span.text.isalpha()])
+                current_price = ''.join(
+                    [
+                        span.text
+                        for span in price_info.find(class_='product-card-prices__actual')
+                        .find(class_='product-price__sum')
+                        .find_all('span')
+                        if not span.text.isalpha()
+                    ]
+                )
                 if price := price_info.find(class_='product-card-prices__old'):
                     price = price.find(class_='product-price__sum-rubles').text
                 else:
                     price = current_price
                 option_item = {
-                    'url': item.find('div', class_='product-card__top').find('a', attrs={'data-qa': 'product-card-name'}).get('href'),
+                    'url': item.find('div', class_='product-card__top')
+                    .find('a', attrs={'data-qa': 'product-card-name'})
+                    .get('href'),
                     'price': price,
-                    'current_price': current_price
+                    'current_price': current_price,
                 }
                 items_link.append(option_item)
         return items_link
@@ -71,13 +87,14 @@ class ParseMetro(RequestMixin):
         main_link = re.search(r'https?://([^/]+)', self.url).group(0)
         items = [
             Item(
-                url=main_link + item.get('url'),
-                current_price=item.get('current_price'),
-                price=item.get('price')
-            ).get_description() for item in items
+                url=main_link + item.get('url'), current_price=item.get('current_price'), price=item.get('price')
+            ).get_description()
+            for item in items
         ]
         self.record_json(items)
 
 
-parse_water = ParseMetro(url='https://online.metro-cc.ru/category/bezalkogolnye-napitki/pityevaya-voda-kulery?from=under_search&in_stock=1')
+parse_water = ParseMetro(
+    url='https://online.metro-cc.ru/category/bezalkogolnye-napitki/pityevaya-voda-kulery?from=under_search&in_stock=1'
+)
 parse_water.parse()

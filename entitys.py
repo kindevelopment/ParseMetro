@@ -29,7 +29,12 @@ class Item(RequestMixin):
         return item_name
 
     def set_brand(self) -> str:
-        item_brand = self.soup.find('ul', class_='product-attributes__list style--product-page-short-list').find('li').find('a').text
+        item_brand = (
+            self.soup.find('ul', class_='product-attributes__list style--product-page-short-list')
+            .find('li')
+            .find('a')
+            .text
+        )
         return item_brand.strip()
 
     @log
@@ -38,11 +43,13 @@ class Item(RequestMixin):
         Функция получения описании товара
 
         """
-        return dict({
-            'id': self.id,
-            'name': self.name,
-            'link': self.url,
-            'current_price': self.current_price,
-            'price': self.price,
-            'brand': self.brand
-        })
+        return dict(
+            {
+                'id': self.id,
+                'name': self.name,
+                'link': self.url,
+                'current_price': self.current_price,
+                'price': self.price,
+                'brand': self.brand,
+            }
+        )

@@ -7,5 +7,5 @@ def log(func):
         result = func(*args, **kwargs)
         logger.info(f'Успешно отработала => {func.__doc__.strip()}')
         return result
-    return wrapper
 
+    return wrapper
