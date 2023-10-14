@@ -3,9 +3,9 @@ import time
 from dataclasses import dataclass
 from typing import List
 import json
-from entitys import Item
+from logic.entitys import Item
+from logic.mixins import RequestMixin
 from services.logger import log
-from mixins import RequestMixin
 from services.path_folder import check_folder
 
 
@@ -96,7 +96,8 @@ class ParseMetro(RequestMixin):
         self.record_json(items)
 
 
-parse_water = ParseMetro(
-    url='https://online.metro-cc.ru/category/bezalkogolnye-napitki/pityevaya-voda-kulery?from=under_search&in_stock=1'
-)
-parse_water.parse()
+if __name__ == '__main__':
+    parse_water = ParseMetro(
+        url='https://online.metro-cc.ru/category/bezalkogolnye-napitki/pityevaya-voda-kulery?from=under_search&in_stock=1'
+    )
+    parse_water.parse()

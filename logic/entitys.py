@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from bs4 import BeautifulSoup
+from logic.mixins import RequestMixin
 from services.logger import log
-from mixins import RequestMixin
 
 
 @dataclass

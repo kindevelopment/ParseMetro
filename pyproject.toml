@@ -1,3 +1,23 @@
+[tool.poetry]
+name = "scrapping-metro"
+version = "0.1.0"
+description = ""
+authors = ["kindevelopment <madeinbosco@inbox.ru>"]
+readme = "README.md"
+packages = []
+
+[tool.poetry.dependencies]
+python = "^3.11"
+beautifulsoup4 = "^4.12.2"
+requests = "^2.31.0"
+pre-commit = "^3.5.0"
+loguru = "^0.7.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
 [tool.black]
 line-length = 120
 include = '\.pyi?$'
