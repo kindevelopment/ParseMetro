@@ -1,6 +1,5 @@
 venv
 .idea
 debug-logg/*
-parse-data/*
 __pycache__/*
 *__pycache__/
