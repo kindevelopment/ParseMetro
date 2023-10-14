@@ -1,0 +1,5 @@
+venv
+.idea
+logg/*
+parse-data/*
+__pycache__/*
