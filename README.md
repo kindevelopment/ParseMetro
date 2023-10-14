@@ -17,7 +17,10 @@ poetry install
 ```
 poetry run python -m logic.parser
 ```
-
+3) Перед коммитом в свой репозиторий, запустите прекоммит командной:
+```
+pre-commit install
+```
 ## Используемы инструменты
 - python - 3.11
 - requests
