@@ -8,6 +8,7 @@ from services.logger import log
 class Item(RequestMixin):
     id: str = field(init=False)
     url: str
+    city_id: int
     name: str = field(init=False)
     current_price: str
     price: str
@@ -40,7 +41,7 @@ class Item(RequestMixin):
     @log
     def get_description(self) -> dict[str]:
         """
-        Функция получения описании товара
+        Функция получения описания товара
 
         """
         return dict(

@@ -3,8 +3,12 @@ import time
 from dataclasses import dataclass
 from typing import List
 import json
+
+from constants.city import CITY_ID
 from logic.entitys import Item
 from logic.mixins import RequestMixin
+from services.create_city import create_text_for_input
+from services.get_city import get_city_id, get_city_name
 from services.logger import log
 from services.path_folder import check_folder
 
@@ -12,6 +16,7 @@ from services.path_folder import check_folder
 @dataclass
 class ParseMetro(RequestMixin):
     url: str
+    city_id: int
 
     @log
     def get_amount_pages(self) -> int:
@@ -66,16 +71,16 @@ class ParseMetro(RequestMixin):
                 items_link.append(option_item)
         return items_link
 
-    @staticmethod
-    def record_json(items: List[dict[str]]) -> bool:
+    def record_json(self, items: List[dict[str]]) -> bool:
         """
         Функция - записи в файл.
 
         """
+        city_name = get_city_name(self.city_id)
         current_time = time.time()
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(current_time))
         check_folder('parse-data')
-        with open(f'parse-data/data - {current_time}.json', "w", encoding="utf-8") as file:
+        with open(f'parse-data/data - {city_name} - {current_time}.json', "w", encoding="utf-8") as file:
             json.dump(items, file, indent=4, ensure_ascii=False)
             return True
 
@@ -89,15 +94,29 @@ class ParseMetro(RequestMixin):
         main_link = re.search(r'https?://([^/]+)', self.url).group(0)
         items = [
             Item(
-                url=main_link + item.get('url'), current_price=item.get('current_price'), price=item.get('price')
+                url=main_link + item.get('url'),
+                current_price=item.get('current_price'),
+                price=item.get('price'),
+                city_id=self.city_id,
             ).get_description()
             for item in items
         ]
         self.record_json(items)
 
 
-if __name__ == '__main__':
+def main():
+    text = create_text_for_input()
+    city_id = int(input(text))
+    while not CITY_ID.get(city_id):
+        city_id = int(input(text))
+    print(city_id)
+    city_id = get_city_id(city_id)
     parse_water = ParseMetro(
-        url='https://online.metro-cc.ru/category/bezalkogolnye-napitki/pityevaya-voda-kulery?from=under_search&in_stock=1'
+        url='https://online.metro-cc.ru/category/bezalkogolnye-napitki/pityevaya-voda-kulery?from=under_search&in_stock=1',
+        city_id=city_id,
     )
     parse_water.parse()
+
+
+if __name__ == '__main__':
+    main()
