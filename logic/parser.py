@@ -7,7 +7,7 @@ import json
 from constants.city import CITY_ID
 from logic.entitys import Item
 from logic.mixins import RequestMixin
-from services.create_city import create_text_for_input
+from services.create_text import create_text_for_input
 from services.get_city import get_city_id, get_city_name
 from services.logger import log
 from services.path_folder import check_folder
